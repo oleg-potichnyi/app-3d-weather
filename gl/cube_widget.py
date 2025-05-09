@@ -1,5 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QOpenGLWidget
+from PyQt5.QtWidgets import QColorDialog
+from PyQt5.QtGui import QColor
 import OpenGL.GL as gl
 import OpenGL.GLU as glu
 
@@ -14,6 +16,14 @@ class CubeWidget(QOpenGLWidget):
         self.scale = 1.0
         self.last_x = 0
         self.last_y = 0
+        self.cube_colors = [
+            QColor(255, 0, 0),
+            QColor(0, 255, 0),
+            QColor(0, 0, 255),
+            QColor(255, 255, 0),
+            QColor(0, 255, 255),
+            QColor(255, 0, 255)
+        ]
 
     def initializeGL(self) -> None:
         """Initialize OpenGL settings (lighting, depth, etc.)."""
@@ -35,41 +45,65 @@ class CubeWidget(QOpenGLWidget):
 
         self.draw_cube()
 
-    def draw_cube(self):
+    def draw_cube(self) -> None:
         """Function for drawing a simple cube."""
         gl.glBegin(gl.GL_QUADS)
 
-        gl.glColor3f(1.0, 0.0, 0.0)
+        gl.glColor3f(
+            self.cube_colors[0].redF(),
+            self.cube_colors[0].greenF(),
+            self.cube_colors[0].blueF()
+        )
         gl.glVertex3f(-1.0, -1.0, 1.0)
         gl.glVertex3f(1.0, -1.0, 1.0)
         gl.glVertex3f(1.0, 1.0, 1.0)
         gl.glVertex3f(-1.0, 1.0, 1.0)
 
-        gl.glColor3f(0.0, 1.0, 0.0)
+        gl.glColor3f(
+            self.cube_colors[1].redF(),
+            self.cube_colors[1].greenF(),
+            self.cube_colors[1].blueF()
+        )
         gl.glVertex3f(-1.0, -1.0, -1.0)
         gl.glVertex3f(-1.0, 1.0, -1.0)
         gl.glVertex3f(1.0, 1.0, -1.0)
         gl.glVertex3f(1.0, -1.0, -1.0)
 
-        gl.glColor3f(0.0, 0.0, 1.0)
+        gl.glColor3f(
+            self.cube_colors[2].redF(),
+            self.cube_colors[2].greenF(),
+            self.cube_colors[2].blueF()
+        )
         gl.glVertex3f(-1.0, -1.0, -1.0)
         gl.glVertex3f(-1.0, -1.0, 1.0)
         gl.glVertex3f(-1.0, 1.0, 1.0)
         gl.glVertex3f(-1.0, 1.0, -1.0)
 
-        gl.glColor3f(1.0, 1.0, 0.0)
+        gl.glColor3f(
+            self.cube_colors[3].redF(),
+            self.cube_colors[3].greenF(),
+            self.cube_colors[3].blueF()
+        )
         gl.glVertex3f(1.0, -1.0, -1.0)
         gl.glVertex3f(1.0, 1.0, -1.0)
         gl.glVertex3f(1.0, 1.0, 1.0)
         gl.glVertex3f(1.0, -1.0, 1.0)
 
-        gl.glColor3f(1.0, 0.0, 1.0)
+        gl.glColor3f(
+            self.cube_colors[4].redF(),
+            self.cube_colors[4].greenF(),
+            self.cube_colors[4].blueF()
+        )
         gl.glVertex3f(-1.0, 1.0, -1.0)
         gl.glVertex3f(-1.0, 1.0, 1.0)
         gl.glVertex3f(1.0, 1.0, 1.0)
         gl.glVertex3f(1.0, 1.0, -1.0)
 
-        gl.glColor3f(0.0, 1.0, 1.0)
+        gl.glColor3f(
+            self.cube_colors[5].redF(),
+            self.cube_colors[5].greenF(),
+            self.cube_colors[5].blueF()
+        )
         gl.glVertex3f(-1.0, -1.0, -1.0)
         gl.glVertex3f(1.0, -1.0, -1.0)
         gl.glVertex3f(1.0, -1.0, 1.0)
@@ -122,3 +156,11 @@ class CubeWidget(QOpenGLWidget):
         self.angle_y = 0
         self.scale = 1.0
         self.update()
+
+    def choose_color(self, face_index: int) -> None:
+        """Allows the user to select a color for a specific cube face."""
+        current_color = self.cube_colors[face_index]
+        color = QColorDialog.getColor(initial=current_color, parent=self)
+        if color.isValid():
+            self.cube_colors[face_index] = color
+            self.update()
