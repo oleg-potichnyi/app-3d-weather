@@ -2,6 +2,9 @@ import requests
 
 
 def get_weather(city: str) -> str:
+    """Fetch current weather for a city
+    and return temperature and description."""
+
     try:
         response = requests.get(f"https://wttr.in/{city}?format=j1", timeout=5)
         if response.status_code == 200:
