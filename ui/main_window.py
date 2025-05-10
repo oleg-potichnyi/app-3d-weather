@@ -62,7 +62,6 @@ class MainWindow(QMainWindow):
         weather_layout.addWidget(self.description_label)
         weather_layout.addWidget(self.icon_label)
 
-        # Add color change buttons for each face
         self.color_buttons = []
         for i in range(6):
             button = QPushButton(f"Change color for face {i + 1}")
@@ -70,7 +69,6 @@ class MainWindow(QMainWindow):
             self.color_buttons.append(button)
             weather_layout.addWidget(button)
 
-        # weather_layout.addStretch()
         weather_layout.addWidget(self.reset_button)
 
         main_layout = QHBoxLayout()
